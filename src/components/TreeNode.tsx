@@ -16,7 +16,7 @@ export interface Node {
 
 type Props = {
   node: Node; 
-  getChildNodes: (node: Node) => [Node];
+  getChildNodes: (node: Node) => Node[];
   level: number;
   onToggle: (node: Node) => void;
   onNodeSelect: (node: Node) => void;

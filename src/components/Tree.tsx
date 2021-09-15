@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import values from 'lodash/values';
+// import values from 'lodash/values';
 import PropTypes from 'prop-types';
 
 import TreeNode, { Node } from './TreeNode';
@@ -11,6 +11,10 @@ type Props = {
 };
 
 class Tree extends Component<Props> {
+
+  static propTypes = {
+    onSelect: PropTypes.func.isRequired,
+  };
 
   state = {
     nodes: data,
@@ -27,10 +31,14 @@ class Tree extends Component<Props> {
   }
 
   getChildNodes = (node: Node) => {
-    const { nodes } = this.state;
+    // const { nodes } = this.state;
     if (!node.children) return [];
-    return node.children.map((path: string) => this.findNode(path))
-            .filter((node: Node | undefined) : node is Node => (node !== undefined)).map((node: Node) => node);
+    let childNodes : Node[] = [];
+    node.children.forEach((path: string) => {
+      const find = this.findNode(path);
+      if (find !== undefined) childNodes.push(find);
+    });
+    return childNodes;
   }  
 
   onToggle = (node: Node) => {
@@ -48,8 +56,9 @@ class Tree extends Component<Props> {
     const rootNodes = this.getRootNodes();
     return (
       <div>
-        { rootNodes.map(node => (
+        { rootNodes.map((node, index) => (
           <TreeNode 
+            key={index}
             node={node}
             getChildNodes={this.getChildNodes}
             // getChildNodes={(node) => ([node])}
@@ -62,8 +71,8 @@ class Tree extends Component<Props> {
   }
 }
 
-Tree.propTypes = {
-  onSelect: PropTypes.func.isRequired,
-};
+// Tree.propTypes = {
+//   onSelect: PropTypes.func.isRequired,
+// };
 
 export default Tree;
